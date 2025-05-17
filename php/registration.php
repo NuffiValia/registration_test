@@ -22,7 +22,7 @@ $sql="INSERT INTO `user`
    (`name`, `family`, `login`, `parole`) VALUES
    ('$name', '$family', '$login', '$parole')";
 
-$user = array("login"=>$login, "error"=>0);
+$user = array("login"=>$login, "name"=>$name, "family"=>$family, "error"=>0);
 
 try {
 	$db->exec($sql); 
