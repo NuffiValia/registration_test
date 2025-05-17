@@ -17,15 +17,15 @@ echo <<<HTML
 		<div data-main_title="container" class="container-fluid" >
 			<div class="row main-row">
 				<div  class="col-12 col-sm-12 col-md-12 col-lg-12" id="container">
-				<p> Добро пожаловать на сайт! <span style="color: green;"  name="user_name"> </span></p>
-				<div data-registr_btns="container" name="registr_form_class">													
-					<button type="button"  name="registr_form_btn" class="btn btn-success btn-sm" title="регистрация на сайте">Sig up</button>
-					
-					<button type="button"  name="atorization_form_btn" class="btn btn-info btn-sm" title="авторизация на сайте">Sig in</button>
-				</div>
+				<p> Добро пожаловать на сайт! <span style="color: green; font-weight: bold;"  name="user_name"> </span></p>
+
 				
 				<div name="variant_form">
-
+					<div data-registr_btns="container" name="registr_form_class">													
+						<button type="button"  name="registr_form_btn" class="btn btn-success btn-sm" title="регистрация на сайте">Sig up</button>
+					
+						<button type="button"  name="atorization_form_btn" class="btn btn-info btn-sm" title="авторизация на сайте">Sig in</button>
+					</div>
 				</div>
 				</div><!-- end col-12 -->
 			</div><!-- end main-row -->
