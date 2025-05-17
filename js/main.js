@@ -1,32 +1,36 @@
-var StateMap = {
-	
-	main_title: {
-		
+var StateMap = {	
+	main_title: {//заголовок сайта		
 		container: "main_title",
-		props: [["variant_form", "render-variant", "[name='variant_form']"], ["registr_form_btn", "click", "[name='registr_form_btn']"],
-		["atorization_form_btn", "click", "[name='atorization_form_btn']"],
-		["registr_form_class", "class", "[name='registr_form_class']"],  ["user_name", "text", "[name='user_name']"]
-		],
-		methods: {
-			registr_form_btn: function(){						
-				this.parent.props.variant_form.setProp("registr_form"); //меняем отображаемый компонент - пустой div на форму регистрации
-				this.parent.props.registr_form_class.setProp("d-none"); // скрываем панель с кнопками при нажатии
-			},
-            atorization_form_btn: function(){
-				this.parent.props.variant_form.setProp("autorization_form"); //меняем отображаемый компонент - пустой div на форму авторизации
-				this.parent.props.registr_form_class.setProp("d-none"); 				
-			}			
-		},		
-	},		
-	fetchComponents: {
-		
+		props: [["variant_form", "render-variant", "[name='variant_form']"],["user_name", "text", "[name='user_name']"]],
+		methods: {}		
+	},
+	registr_btns:{ //форма регистрации
+			container: "registr_btns",
+			props: [ ["registr_form_btn", "click", "[name='registr_form_btn']"],
+					 ["atorization_form_btn", "click", "[name='atorization_form_btn']"],					
+			],
+			methods: {
+				registr_form_btn: function(){						
+					this.rootLink.state.main_title.props.variant_form.setProp("registr_form"); //меняем отображаемый компонент - пустой div на форму регистрации
+				},
+				atorization_form_btn: function(){
+					this.rootLink.state.main_title.props.variant_form.setProp("autorization_form"); //меняем отображаемый компонент - пустой div на форму авторизации		
+				}
+			}
+	},
+	fetchComponents: {//компоненты шаблона
+		profile: {//вставка информациии профиля	
+			container: "profile",
+			props: [["login", "text", "[name='login']"]
+			],
+			methods: {			
+			}		
+		},
 		registr_form:{ //форма регистрации
 			container: "registr_form",
 			props: [["name", "inputvalue", "[name='name']"], ["family", "inputvalue", "[name='family']"],
 					["login", "inputvalue", "[name='login']"], ["parole", "inputvalue", "[name='parole']"],
-					["registr_btn", "click", "[name='registr_btn']"],
-					["registration_form_class", "class", ""]
-					
+					["registr_btn", "click", "[name='registr_btn']"]//, ["registration_form_class", "class", ""]					
 			],
 			methods: {
 				registr_btn: function(){ //кнопка регистрации
@@ -52,26 +56,22 @@ var StateMap = {
 					 var this_ =  this;
 					 				 
 					this.rootLink.stateMethods.sendPost(url, formData, function(data){ //отправляем данные на сервер
-						if(data){ //при отсутствии ошибки отображаем логин пользователя в титле и скрываем форму регистрации.
+						if(data){ //при отсутствии ошибки отображаем логин пользователя в заголовке и меняем шаблон формы регистрации на шаблон профиля
 							alert("пользователь " +data.login + "  регистрация завершена");
-							this_.rootLink.state.main_title.props.user_name.setProp(data.login);
-							this_.parent.props.registration_form_class.setProp("d-none");
-							
-							}else{
+							this_.rootLink.state.main_title.props.user_name.setProp(" "+data.name+" "+data.family);
+							this_.rootLink.state.main_title.props.variant_form.setProp({componentName: "profile", login: data.login});						
+						}else{
 							console.log(data);
 							alert("ошибка регистрации, возможно неуникальный логин, попробуйте еще раз");							
 						}					
 					} );					
-				}
-				
+				}				
 			}			
 		},
 		autorization_form: { //форма авторизации
 			container: "autorization_form",
 			props: [ ["login", "inputvalue", "[name='login']"], ["parole", "inputvalue", "[name='parole']"],
-					["autorization_btn", "click", "[name='autorization_btn']"],
-					["autorization_form_class", "class", ""]
-					
+					["autorization_btn", "click", "[name='autorization_btn']"] //, ["autorization_form_class", "class", ""]					
 			],
 			methods: {
 				autorization_btn: function(){ //кнопка регистрации
@@ -91,10 +91,10 @@ var StateMap = {
 					this.rootLink.stateMethods.sendPost(url, formData, function(data){ //отправляем данные на сервер
 						if(data){ 
 							alert("пользователь " +data.name + " - вход выполнен.");
-							this_.rootLink.state.main_title.props.user_name.setProp(" "+data.name+" "+data.family);
-							this_.parent.props.autorization_form_class.setProp("d-none");
+							this_.rootLink.state.main_title.props.user_name.setProp(" "+data.name+" "+data.family); //отображаем имя и фамилию в заголовке
+							this_.rootLink.state.main_title.props.variant_form.setProp({componentName: "profile", login: data.login}); //отображаем логин во вставке профиля
 							console.log(data);
-							}else{
+						}else{
 							console.log(data);
 							alert("ошибка авторизации, попробуйте еще раз");							
 						}					
@@ -134,8 +134,7 @@ var StateMap = {
 		}		
 	}	
 }
-window.onload = function(){
-	
+window.onload = function(){	
 	var HM = new HTMLixState(StateMap);
 	console.log(HM); 
 }
